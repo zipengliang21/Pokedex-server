@@ -1,0 +1,13 @@
+node_modules/
+build/
+config/
+.env
+*.icloud
+.DS_Store
+.nyc_output/
+src/**/*.js
+src/**/*.map
+test/**/*.js
+test/**/*.map
+.idea/
+config/dev.env
