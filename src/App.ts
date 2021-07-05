@@ -61,7 +61,9 @@ export default class App {
         connect to db
         */
         db.connect();
-        require("./models/pokemon")
+        require("./models/pokemon");
+        require("./models/post");
+        require("./models/comment");
 
         /*
         configure routes
