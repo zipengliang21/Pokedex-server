@@ -37,6 +37,7 @@ export default class App {
                 origin: [
                     'http://localhost:3000',
                     'https://liangzipeng.com/',
+                    'https://liangzipeng.com/Pokemon/'
                 ],
             })
         );

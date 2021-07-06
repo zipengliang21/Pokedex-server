@@ -1,1 +1,1 @@
-find src/ -type f \( -name \*.js -o -name \*.map \) -delete
+find src/ test/ -type f \( -name \*.js -o -name \*.map \) -delete
