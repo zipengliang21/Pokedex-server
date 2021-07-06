@@ -2,7 +2,10 @@ import { Request, Response } from 'express';
 import {Posts, PostDocument} from "../../models/post";
 
 export default async (req: Request, res: Response): Promise<void> => {
-    const postList: PostDocument[] = await Posts.find({});
+    let newPost = req.body;
+    await new Posts(newPost).save();
+    const postList = await Posts.find({});
+    // res.json(cardList);
 
-    res.status(200).json({postList: postList, count: postList.length });
+    res.status(200).json(postList);
 };

@@ -1,9 +1,9 @@
 import getPost from './getPost';
 import getPostList from "./getPostList";
-// import createPokemon from "./createPokemon";
+import createPost from "./createPost";
 
 export default {
     getPost: getPost,
     getPostList: getPostList,
-    // createPokemon: createPokemon,
+    createPost: createPost,
 };
