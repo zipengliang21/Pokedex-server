@@ -36,6 +36,7 @@ export default class App {
                 credentials: true,
                 origin: [
                     'http://localhost:3000',
+                    'https://liangzipeng.com/',
                 ],
             })
         );
