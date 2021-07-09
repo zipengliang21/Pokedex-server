@@ -1,4 +1,6 @@
 export const MESSAGES = {
+    EMPTY_COMMENT: 'Comment cannot be empty.',
+    POST_ID_NOT_FOUND: 'Post id does not exist.',
 };
 
 export const MONGODB = {

@@ -9,8 +9,10 @@ const setUpRoutes = (app: Express): void => {
     app.post('/posts/', post.createPost);
     app.get('/pokemons/:_id', pokemon.getPokemon);
     app.get('/pokemons/', pokemon.getPokemonList);
+    app.post('/pokemons/', pokemon.createPokemon);
     app.get('/comments/:_id', comment.getComment);
     app.get('/comments/', comment.getCommentList);
+    app.post('/comments/', comment.createComment);
 
 };
 

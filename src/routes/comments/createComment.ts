@@ -1,9 +1,49 @@
 import { Request, Response } from 'express';
-import {Comments, CommentDocument} from "../../models/comment";
+import {Comments, CommentDocument,IComment} from "../../models/comment";
+import {Posts} from '../../models/post';
+import { ServerError } from '../../util/util';
+import { MESSAGES } from '../../util/constants';
 
 export default async (req: Request, res: Response): Promise<void> => {
-    let newComment = req.body;
-    await new Comments(newComment).save();
-    const commentList = await Comments.find({});
-    res.status(200).json(commentList);
+    const {
+        userId,
+        userName,
+        postID,
+        commentID,
+        content,
+    }: {userId: string;
+        userName: string;
+        postID: string;
+        commentID: string;
+        content: string;} = req.body;
+
+    if (content === null || content === undefined || typeof content !== 'string') {
+        throw new ServerError({ statusCode: 400, message: MESSAGES.EMPTY_COMMENT });
+    }
+
+    let articleExists: boolean;
+    try {
+        articleExists = await Posts.exists({ postID: postID });
+    } catch (err) {
+        throw new ServerError({
+            statusCode: 400,
+            message: MESSAGES.POST_ID_NOT_FOUND,
+        });
+    }
+    if (!articleExists) {
+        throw new ServerError({
+            statusCode: 400,
+            message: MESSAGES.POST_ID_NOT_FOUND,
+        });
+    }
+
+    const commentInfo: IComment = {
+        userId,
+        userName,
+        postID,
+        commentID,
+        content,
+    };
+    const newComment: CommentDocument = await new Comments(commentInfo).save();
+    res.status(201).json({ comment: newComment });
 };

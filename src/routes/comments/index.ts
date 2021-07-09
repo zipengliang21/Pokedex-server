@@ -1,9 +1,9 @@
 import getComment from './getComment';
 import getCommentList from "./getCommentList";
-// import createPokemon from "./createPokemon";
+import createComment from "./createComment";
 
 export default {
     getComment: getComment,
     getCommentList: getCommentList,
-    // createPokemon: createPokemon,
+    createComment: createComment,
 };
