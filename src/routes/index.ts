@@ -12,6 +12,7 @@ const setUpRoutes = (app: Express): void => {
     app.post('/pokemons/', pokemon.createPokemon);
     app.get('/comments/:_id', comment.getComment);
     app.get('/comments/', comment.getCommentList);
+    app.get('/comments/post/:postID', comment.getCommentForPost);
     app.post('/comments/', comment.createComment);
 
 };
