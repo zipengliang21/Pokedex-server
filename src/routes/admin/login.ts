@@ -11,7 +11,7 @@ export default async (req: Request, res: Response): Promise<void> => {
     console.log(userName);
     let userExist: boolean;
     try {
-        userExist = await AdminModel.exists({ userName: userName });
+        userExist = await AdminModel.exists({ adminName: userName });
     } catch (err) {
         console.log(err.message);
         res.status(500).send("Error in Finding existing user");
@@ -25,8 +25,8 @@ export default async (req: Request, res: Response): Promise<void> => {
     }
     let user: any;
     try {
-        user = AdminModel.findOne({
-            userName
+        user = await AdminModel.findOne({
+            adminName: userName
         });
     } catch (e) {
         console.error(e);

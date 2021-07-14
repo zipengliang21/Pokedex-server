@@ -27,8 +27,8 @@ export default async (req: Request, res: Response): Promise<void> => {
     }
     let user: any;
     try {
-        user = UserModel.findOne({
-            userName
+        user = await UserModel.findOne({
+            userName: userName
         });
     } catch (e) {
         console.error(e);

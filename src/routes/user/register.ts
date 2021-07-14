@@ -22,10 +22,11 @@ export default async (req: Request, res: Response): Promise<void> => {
         });
     }
     let user = new UserModel({
-        userName,
-        password
+        userName:userName,
+        password:password,
     });
-    user.save();
+    console.log(user);
+    await user.save();
     res.status(200).json({
         msg: "User Created Successfully"
     });

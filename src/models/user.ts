@@ -6,7 +6,7 @@ const UserModel = mongoose.model('profile',
         userId: String,
         userName: String,
         userDescription: String,
-        password: String
+        password: String,
     }), 'profile'
 );
 module.exports = UserModel;
