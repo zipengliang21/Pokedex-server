@@ -1,16 +1,18 @@
 import { Request, Response } from 'express';
 import {ServerError} from "../../util/util";
 import {Posts} from "../../models/post";
-const UserModel = require('../../models/user');
+import {IUser, User} from "../../models/user";
 
 export default async (req: Request, res: Response): Promise<void> => {
     const {
+        email,
         userName,
-        password
+        password,
+        confirmPassword
     } = req.body;
-    let userExist: boolean;
+    let userExist: IUser;
     try {
-        userExist = await UserModel.exists({ userName: userName });
+        userExist = await User.findOne({ email: email });
     } catch (err) {
         console.log(err.message);
         res.status(500).send("Error in Finding existing user");
@@ -21,12 +23,14 @@ export default async (req: Request, res: Response): Promise<void> => {
             message: "User Already Exist",
         });
     }
-    let user = new UserModel({
-        userName:userName,
-        password:password,
-    });
-    console.log(user);
-    await user.save();
+    // save new user to db
+    const userInfo: IUser = {
+        email,
+        userName,
+        password: password,
+    };
+
+    await new User(userInfo).save();
     res.status(200).json({
         msg: "User Created Successfully"
     });
