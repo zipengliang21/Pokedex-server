@@ -67,6 +67,7 @@ export default class App {
         require("./models/pokemon");
         require("./models/post");
         require("./models/comment");
+        require("./models/profile");
 
         /*
         configure routes

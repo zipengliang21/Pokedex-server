@@ -2,6 +2,7 @@ import { Express } from 'express';
 import pokemon from './pokemon/index';
 import post from './posts/index';
 import comment from './comments/index'
+import profile from './profile/index';
 
 const setUpRoutes = (app: Express): void => {
     app.get('/posts/:_id', post.getPost);
@@ -13,7 +14,7 @@ const setUpRoutes = (app: Express): void => {
     app.get('/comments/:_id', comment.getComment);
     app.get('/comments/', comment.getCommentList);
     app.post('/comments/', comment.createComment);
-
+    app.post('/profile/edit',profile.editProfile);
 };
 
 export default setUpRoutes;
