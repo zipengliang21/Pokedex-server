@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "server code for our pokemon project",
   "dependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/cookie-parser": "^1.4.2",
     "@types/cors": "^2.8.10",
     "@types/express": "^4.17.12",
@@ -12,6 +13,7 @@
     "@types/mongoose-auto-increment": "^5.0.34",
     "@types/morgan": "^1.9.2",
     "@types/validator": "^13.6.3",
+    "bcrypt": "^5.0.1",
     "colors": "^1.4.0",
     "consola": "^2.15.3",
     "cookie-parser": "^1.4.5",

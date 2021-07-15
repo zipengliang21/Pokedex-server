@@ -1,19 +1,9 @@
-// import mongoose from "mongoose";
-//
-//
-// const UserModel = mongoose.model('profile',
-//     new mongoose.Schema({
-//         userId: String,
-//         userName: String,
-//         userDescription: String,
-//         password: String,
-//     }), 'profile'
-// );
-// module.exports = UserModel;
 import mongoose from 'mongoose';
 import validator from 'validator';
+import bcrypt from 'bcrypt';
 
 import db from '../mongodb.config';
+import {ServerError} from "../util/util";
 
 const instance = db.instance;
 
@@ -41,7 +31,7 @@ const userSchema = new instance.Schema({
         required: [true, 'User must have an email address.'],
         validate: [validator.isEmail, 'Please provide a valid email'],
     },
-    bio: { type: String, default: '' },
+    description: { type: String, default: '' },
     avatar: {
         type: String,
         default: "http://3.bp.blogspot.com/-fZ-FTGBT_OI/V87me3nL3PI/AAAAAAAAAkQ/" +
@@ -51,10 +41,28 @@ const userSchema = new instance.Schema({
     password: {
         type: String,
         required: [true, 'User must have a password'],
-        select: false,
     },
     createdOn: { type: Date, default: Date.now },
     updatedOn: { type: Date, default: Date.now },
+    tokens: [{
+        token: {
+            type: String,
+            required: true
+        }
+    }]
 }, { collection: "profile"});
+
+
+// Hash the plain text password before saving
+userSchema.pre<UserDocument>('save', async function (next) {
+    const user = this
+
+    if (user.isModified('password')) {
+        console.log(user.password)
+        user.password = await bcrypt.hash(user.password, 8)
+    }
+    console.log(user)
+    next()
+})
 
 export const User = instance.model<UserDocument>('User', userSchema);
