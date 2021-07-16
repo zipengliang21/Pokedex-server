@@ -39,8 +39,8 @@ export default async (req: Request, res: Response): Promise<void> => {
         stats: {
             hp: newPokemon.baseHp,
             attack: newPokemon.baseAttack,
-            defense: newPokemon.baseDefense,
-            spattck: newPokemon.baseSpAtk,
+            defense: newPokemon.baseDefence,
+            spattack: newPokemon.baseSpAtk,
             spdefense: newPokemon.baseSpDef,
             speed: newPokemon.baseSpeed
         },
