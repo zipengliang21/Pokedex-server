@@ -36,6 +36,9 @@ export default class App {
                 credentials: true,
                 origin: [
                     'http://localhost:3000',
+                    'https://liangzipeng.com',
+                    'https://liangzipeng.com/',
+                    'https://liangzipeng.com/Pokemon/'
                 ],
             })
         );
@@ -64,6 +67,7 @@ export default class App {
         require("./models/pokemon");
         require("./models/post");
         require("./models/comment");
+        require("./models/profile");
         require("./models/user");
         require("./models/admin");
 

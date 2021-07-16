@@ -1,7 +1,8 @@
 import { Express } from 'express';
 import pokemon from './pokemon/index';
 import post from './posts/index';
-import comment from './comments/index';
+import comment from './comments/index'
+import profile from './profile/index';
 import user from './user/index';
 import admin from './admin/index'
 
@@ -20,6 +21,8 @@ const setUpRoutes = (app: Express): void => {
     app.get('/comments/', comment.getCommentList);
     app.get('/comments/post/:postID', comment.getCommentForPost);
     app.post('/comments/', comment.createComment);
+    app.get('/profile/:_id',profile.getProfile);
+    app.post('/profile/edit',profile.editProfile);
 
     app.post('/login', user.login);
     app.post('/register', user.register);
