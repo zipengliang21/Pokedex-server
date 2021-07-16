@@ -1,28 +1,6 @@
-// import { Request, Response } from 'express';
-// import {IPokemon, Pokemon, PokemonDocument} from "../../models/pokemon";
-//
-//
-//
-// export default async (req: Request, res: Response): Promise<void> => {
-//     let newPokemon = req.body;
-//     await new Pokemon(newPokemon).save();
-//     const pokeList = await Pokemon.find({});
-//     res.status(200).json(pokeList);
-//     // const newPokemon: IPokemon = await new Pokemon({
-//     //     name: "123",
-//     //     id: "1243",
-//     //     img: "123",
-//     //     type: ["123"],
-//     //     stats: {},
-//     //     moves: {},
-//     //     damages: {},
-//     //     misc: {},
-//     // }).save();
-//
-//     // res.status(200).json({ newPokemon });
-// };
 import { Request, Response } from 'express';
-import {IPokemon, Pokemon, PokemonDocument} from "../../models/pokemon";
+import {Pokemon} from "../../models/pokemon";
+import {ServerError} from "../../util/util";
 
 
 
@@ -31,6 +9,13 @@ export default async (req: Request, res: Response): Promise<void> => {
     let result = await Pokemon.find({});
     let img = "http://img.pokemondb.net/artwork/" + newPokemon.name.toLowerCase() +".jpg";
     let id = result.length + 1 +'';
+
+    if (newPokemon.name === ''|| newPokemon.name === undefined){
+        throw new ServerError({
+            message: "no name",
+            statusCode: 400,
+        });
+    }
     var pokemon = new Pokemon({
         id: id,
         name: newPokemon.name,
@@ -48,24 +33,10 @@ export default async (req: Request, res: Response): Promise<void> => {
             height: newPokemon.height,
             weight: newPokemon.weight,
             abilities: {normal:newPokemon.abilities,
-             hidden: newPokemon.abilities}
+             hidden: newPokemon.hiddenAbility}
         }
     });
-    await pokemon.save();
-        // function (err: any, results:any) {
-        //     if (err){
-        //         console.log(err)
-        //         res.status(400).json({
-        //             message: err
-        //         });
-        //     }
-        //     else{
-        //         console.log(results._id);
-        //         res.status(200).json({
-        //             message: "Add Pokemon : "+results._id,
-        //         });
-        //     }
-        // }
+    await pokemon.save()
 
     const added = await Pokemon.findOne({id: id});
     res.status(200).json({ added });
