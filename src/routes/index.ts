@@ -14,6 +14,7 @@ const setUpRoutes = (app: Express): void => {
     app.get('/comments/:_id', comment.getComment);
     app.get('/comments/', comment.getCommentList);
     app.post('/comments/', comment.createComment);
+    app.get('/profile/:_id',profile.getProfile);
     app.post('/profile/edit',profile.editProfile);
 };
 
