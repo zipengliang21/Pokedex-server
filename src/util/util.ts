@@ -31,6 +31,8 @@ export class ServerError extends Error {
     statusCode: number;
 }
 
+
+
 export const stdout = {
     error: (message: string, debug = false): void => {
         if (process.env.NODE_ENV === 'development' || debug) {

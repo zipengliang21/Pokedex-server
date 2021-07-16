@@ -10,6 +10,7 @@ export default async (req: Request, res: Response): Promise<void> => {
     const content: string = req.body.content ? req.body.content : 'No content yet.';
     const userName:string = req.body.userName;
     const postID:string = req.body.postID;
+    const date:Date = req.body.date;
 
     const postInfo: IPost ={
         userId,
@@ -18,6 +19,7 @@ export default async (req: Request, res: Response): Promise<void> => {
         title,
         description,
         content,
+        date,
     };
     const newPost: PostDocument = await new Posts(postInfo).save();
     const savedPost: PostDocument = await Posts.findById(

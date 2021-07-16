@@ -11,11 +11,13 @@ export default async (req: Request, res: Response): Promise<void> => {
         postID,
         commentID,
         content,
+        date
     }: {userId: string;
         userName: string;
         postID: string;
         commentID: string;
-        content: string;} = req.body;
+        content: string;
+    date:Date} = req.body;
 
     if (content === null || content === undefined || typeof content !== 'string') {
         throw new ServerError({ statusCode: 400, message: MESSAGES.EMPTY_COMMENT });
@@ -43,6 +45,7 @@ export default async (req: Request, res: Response): Promise<void> => {
         postID,
         commentID,
         content,
+        date,
     };
     const newComment: CommentDocument = await new Comments(commentInfo).save();
     res.status(201).json({ comment: newComment });

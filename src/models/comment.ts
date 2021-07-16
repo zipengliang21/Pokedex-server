@@ -10,6 +10,7 @@ export interface IComment {
     postID: string;
     commentID: string;
     content: string;
+    date: Date;
 }
 
 export type CommentDocument = mongoose.Document & IComment;
@@ -20,6 +21,8 @@ const commentSchema = new instance.Schema({
     postID: {type: String, required: true},
     commentID: {type: String, required: true},
     content: {type: String, required: true},
+    date: { type: Date, required: true},
+
 }, { collection: "comments"})
 
 export const Comments = instance.model<any>('Comments', commentSchema);
