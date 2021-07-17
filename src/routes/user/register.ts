@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import {ServerError} from "../../util/util";
 import {Posts} from "../../models/post";
-import {IUser, User} from "../../models/user";
+import {IUser, User, UserDocument} from "../../models/user";
+import {sendToken} from "../../middleware/auth";
 
 export default async (req: Request, res: Response): Promise<void> => {
     const {
@@ -31,7 +32,11 @@ export default async (req: Request, res: Response): Promise<void> => {
     };
 
     await new User(userInfo).save();
-    res.status(200).json({
-        msg: "User Created Successfully"
+    const newUser: UserDocument = await User.findOne({ email: email });
+    sendToken({
+        origin: req.get('Origin'),
+        user: newUser,
+        statusCode: 201,
+        res: res,
     });
 }

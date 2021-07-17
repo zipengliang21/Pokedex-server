@@ -1,30 +1,80 @@
 import jwt from "jsonwebtoken"
-import {User} from "../models/user";
-import {NextFunction, Request, Response} from "express";
+import {User, UserDocument} from "../models/user";
+import {CookieOptions, NextFunction, Request, Response} from "express";
 import {ServerError} from "../util/util";
+import {VerifiedUserRequest} from "./verifiedUserRequest";
 
-const auth = async (req: Request, res: Response, next: NextFunction) => {
+export const auth = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const token = req.header('Authorization').replace('Bearer ', '')
-        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        let token: string;
+        // For Unit Test or Postman Test
+        if(req.header('Authorization')) {
+            token = req.header('Authorization').replace('Bearer ', '');
+        }
+        // For actual request from frontend
+        else if(req.cookies.jwt) {
+            console.log("Auth:----" + token)
+            token = req.cookies.jwt;
+        }
+        console.log("Auth:----" + token)
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
         // @ts-ignore
-        const user = await User.findOne({ _id: decoded._id, 'tokens.token': token })
+        const user = await User.findById(decoded.id);
 
         if (!user) {
             throw new ServerError({
-                message: "Unable to login",
+                message: "Invalid Token",
                 statusCode: 400,
             });
         }
 
-        // @ts-ignore
-        req.token = token
-        // @ts-ignore
-        req.user = user
+        (req as VerifiedUserRequest).verifiedUser = user
         next()
     } catch (e) {
         res.status(401).send({ error: 'Please authenticate.' })
     }
 }
 
-module.exports = auth
+const ONE_DAY = 24 * 60 * 60 * 1000;
+const createToken = (id: string): string => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: '1d',
+    });
+};
+
+export const sendToken = ({origin, user, statusCode, res,}:
+   {
+    origin: string;
+    user: UserDocument;
+    statusCode: number;
+    res: Response;
+}): void => {
+    const token = createToken(user._id);
+    let cookieOptions: CookieOptions;
+    if (process.env.NODE_ENV === 'development') {
+        cookieOptions = {
+            expires: new Date(Date.now() + ONE_DAY),
+            httpOnly: false,
+            secure: false,
+            path: '/Pokemon',
+        };
+    } else if (process.env.NODE_ENV === 'production') {
+        let domain = '';
+        if (origin === 'https://liangzipeng.com/Pokemon/') {
+            domain = origin;
+        }
+        cookieOptions = {
+            expires: new Date(Date.now() + ONE_DAY),
+            httpOnly: false,
+            secure: true,
+            sameSite: 'none',
+            domain: domain,
+            path: '/',
+        };
+    }
+
+    res.cookie('jwt', token, cookieOptions);
+    console.log(token)
+    res.status(statusCode).json({ user: user });
+};
