@@ -57,6 +57,7 @@ export const sendToken = ({origin, user, statusCode, res,}:
             expires: new Date(Date.now() + ONE_DAY),
             httpOnly: false,
             secure: false,
+            path: '/Pokemon',
         };
     } else if (process.env.NODE_ENV === 'production') {
         let domain = '';
