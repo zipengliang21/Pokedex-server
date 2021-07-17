@@ -44,12 +44,6 @@ const userSchema = new instance.Schema({
     },
     createdOn: { type: Date, default: Date.now },
     updatedOn: { type: Date, default: Date.now },
-    tokens: [{
-        token: {
-            type: String,
-            required: true
-        }
-    }]
 }, { collection: "profile"});
 
 
