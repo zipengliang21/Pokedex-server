@@ -3,7 +3,6 @@ import validator from 'validator';
 import bcrypt from 'bcrypt';
 
 import db from '../mongodb.config';
-import {ServerError} from "../util/util";
 
 const instance = db.instance;
 
