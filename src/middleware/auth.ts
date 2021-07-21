@@ -29,7 +29,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
             });
         }
 
-        (req as VerifiedUserRequest).verifiedUser = user
+        (req as VerifiedUserRequest).verifiedUser = user;
         next()
     } catch (e) {
         res.status(401).send({ error: 'Please authenticate.' })
@@ -57,7 +57,7 @@ export const sendToken = ({origin, user, statusCode, res,}:
             expires: new Date(Date.now() + ONE_DAY),
             httpOnly: false,
             secure: false,
-            path: '/Pokemon',
+            path: '/',
         };
     } else if (process.env.NODE_ENV === 'production') {
         let domain = '';
@@ -75,6 +75,5 @@ export const sendToken = ({origin, user, statusCode, res,}:
     }
 
     res.cookie('jwt', token, cookieOptions);
-    console.log(token)
     res.status(statusCode).json({ user: user });
 };

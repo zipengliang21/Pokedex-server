@@ -42,7 +42,7 @@ export default async (req: Request, res: Response): Promise<void> => {
         });
     }
 
-    sendToken({
+    await sendToken({
         origin: req.get('Origin'),
         user: user,
         statusCode: 200,
