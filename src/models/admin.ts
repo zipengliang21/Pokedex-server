@@ -51,7 +51,7 @@ adminSchema.pre<AdminDocument>('save', async function (next) {
         console.log(admin.password)
         admin.password = await bcrypt.hash(admin.password, 8)
     }
-    console.log(admin)
+
     next()
 })
 
