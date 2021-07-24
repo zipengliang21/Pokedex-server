@@ -1,40 +1,63 @@
 import mongoose, { Schema } from "mongoose";
+import validator from 'validator';
+import bcrypt from 'bcrypt';
 
 import db from "../mongodb.config";
 
 const instance = db.instance;
 
 export interface IProfile {
-    userId: String;
-    userName: String;
-    userDescription: String;
-    password:String;
-    location:String;
-    avatar:{data: Buffer,contentType: String};
+    userName: string;
+    email: string;
+    description?: string;
+    avatar?: string;
+    location?: string;
+    password: string;
+    createdOn?: Date;
+    updatedOn?: Date;
 }
 
 export type ProfileDocument = mongoose.Document & IProfile;
 
-const AvatarSchema = new instance.Schema({
-    data: Buffer,
-    contentType: String,
+const CollectionSchema = new instance.Schema({
+    pokemonId:String,
 })
 
-// const CollectionSchema = new instance.Schema({
-//     pokemonId:String;
-// })
-
-// const userCollect = mongoose.model('userCollect', CollectionSchema);
-
 const profileSchema = new instance.Schema({
-    userId: {type: String, required: true},
-    userName: {type: String, required: true},
-    userDescription: {type: String},
-    password:{type:String,required:true},
-    location:{type:String},
-    avatar: AvatarSchema,
-    // userCollect: [{ type: Schema.Types.ObjectId, ref: 'userCollect' }]
+    userName: { type: String, required: [true, 'User must have a name. '] },
+    email: {
+        type: String,
+        unique: true,
+        required: [true, 'User must have an email address.'],
+        validate: [validator.isEmail, 'Please provide a valid email'],
+    },
+    description: { type: String, default: '' },
+    avatar: {
+        type: String,
+        default: "http://3.bp.blogspot.com/-fZ-FTGBT_OI/V87me3nL3PI/AAAAAAAAAkQ/" +
+            "ornK37y9NRgbYhQB1sjANbXUX2HxrISbgCK4B/s1600/068_Machamp.png",
+    },
+    location: { type: String, default: 'Canada' },
+    password: {
+        type: String,
+        required: [true, 'User must have a password'],
+    },
+    createdOn: { type: Date, default: Date.now },
+    updatedOn: { type: Date, default: Date.now },
+    collectionList:{type: CollectionSchema},
 }, { collection: "profile"})
+
+// Hash the plain text password before saving
+profileSchema.pre<ProfileDocument>('save', async function (next) {
+    const profile = this
+
+    if (profile.isModified('password')) {
+        console.log(profile.password)
+        profile.password = await bcrypt.hash(profile.password, 8)
+    }
+    console.log(profile)
+    next()
+})
 
 export const Profile = instance.model<any>('Profile', profileSchema);
 

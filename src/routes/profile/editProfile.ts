@@ -1,30 +1,36 @@
 import { Request, Response } from 'express';
+import bcrypt from "bcrypt";
 import {Profile, ProfileDocument} from "../../models/profile";
 
 export default async (req: Request, res: Response): Promise<void> => {
+    const email:string = req.body.email;
     const userName: string = req.body.userName;
-    const userDescription: string = req.body.description ? req.body.description : 'no description';
+    const description: string = req.body.description ? req.body.description : 'no description';
     const avatar:any = req.body.avatar;
     const password:string = req.body.password;
     const location:string = req.body.location? req.body.location : '';
+    const cPassword:string = req.body.cPassword;
 
     const id  = req.body.userId;
-    // console.log(profile[0])
 
-    // profile[0].userName = userName;
-    // profile[0].userDescription = userDescription;
-    // profile[0].password = password;
-    // profile[0].location = location;
+    const isMatch = await bcrypt.compare(password, cPassword)
 
     const condition = {userId:id };
 
-    const query = {'userName': userName,
-                   'userDescription':userDescription,
+    const query = {'email':email,
+                    'userName': userName,
+                   'description':description,
                     'password':password,
                     'location':location};
 
-    Profile.findOneAndUpdate(condition, query, {upsert: true}, function(err, doc) {
-        if (err) return res.send(500);
-        return res.send("promise done");
-    });
+    if(isMatch){
+        Profile.findOneAndUpdate(condition, query, {upsert: true}, function(err, doc) {
+            if (err) return res.send(500);
+            return res.send("promise done");
+        });
+    } else{
+        res.status(300).send('pwd mismatched');
+    }
+
+
 };
