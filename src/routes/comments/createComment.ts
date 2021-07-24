@@ -23,16 +23,16 @@ export default async (req: Request, res: Response): Promise<void> => {
         throw new ServerError({ statusCode: 400, message: MESSAGES.EMPTY_COMMENT });
     }
 
-    let articleExists: boolean;
+    let postExists: boolean;
     try {
-        articleExists = await Posts.exists({ postID: postID });
+        postExists = await Posts.exists({ postID: postID });
     } catch (err) {
         throw new ServerError({
             statusCode: 400,
             message: MESSAGES.POST_ID_NOT_FOUND,
         });
     }
-    if (!articleExists) {
+    if (!postExists) {
         throw new ServerError({
             statusCode: 400,
             message: MESSAGES.POST_ID_NOT_FOUND,
