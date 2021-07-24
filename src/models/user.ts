@@ -3,7 +3,6 @@ import validator from 'validator';
 import bcrypt from 'bcrypt';
 
 import db from '../mongodb.config';
-import {ServerError} from "../util/util";
 
 const instance = db.instance;
 
@@ -16,6 +15,7 @@ export interface IUser {
     location?: string;
     password: string;
     confirmPassword?: string;
+    isAdmin?: boolean;
     createdOn?: Date;
     updatedOn?: Date;
 }
@@ -42,6 +42,7 @@ const userSchema = new instance.Schema({
         type: String,
         required: [true, 'User must have a password'],
     },
+    isAdmin:{ type: Boolean, default: false },
     createdOn: { type: Date, default: Date.now },
     updatedOn: { type: Date, default: Date.now },
 }, { collection: "profile"});

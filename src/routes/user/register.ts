@@ -18,25 +18,35 @@ export default async (req: Request, res: Response): Promise<void> => {
         console.log(err.message);
         res.status(500).send("Error in Finding existing user");
     }
-    if (userExist) {
-        throw new ServerError({
-            statusCode: 400,
-            message: "User Already Exist",
-        });
-    }
-    // save new user to db
-    const userInfo: IUser = {
-        email,
-        userName,
-        password: password,
-    };
+    try {
 
-    await new User(userInfo).save();
-    const newUser: UserDocument = await User.findOne({ email: email });
-    sendToken({
-        origin: req.get('Origin'),
-        user: newUser,
-        statusCode: 201,
-        res: res,
-    });
+        if (userExist) {
+            throw new ServerError({
+                statusCode: 400,
+                message: "User Already Exist",
+            });
+        }
+    // save new user to db
+        const userInfo: IUser = {
+            email,
+            userName,
+            password: password,
+        };
+
+        await new User(userInfo).save();
+        const newUser: UserDocument = await User.findOne({ email: email });
+        sendToken({
+            origin: req.get('Origin'),
+            user: newUser,
+            statusCode: 201,
+            res: res,
+        });
+    }catch (err) {
+        if (err instanceof ServerError) {
+            res.status(err.statusCode).send(err.message);
+        } else {
+            res.status(500).send("Unexpected error");
+        }
+}
+
 }
