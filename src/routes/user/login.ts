@@ -3,6 +3,7 @@ import {ServerError} from "../../util/util";
 import {User, UserDocument} from "../../models/user";
 import bcrypt from "bcrypt";
 import {sendToken} from "../../middleware/auth";
+import validator from "validator";
 
 export default async (req: Request, res: Response): Promise<void> => {
         const {
@@ -10,40 +11,48 @@ export default async (req: Request, res: Response): Promise<void> => {
             password
         } = req.body;
       try {
+          // Empty email address
           if (!email) {
               throw new ServerError({
-                  message: "Please provide your email address",
+                  message: "Please provide your email address.",
                   statusCode: 400,
               });
-              // res.status(400).send({err:"Please provide your email address"});
           }
 
-          if (!password) {
+          // Invalid email address format
+          if (!validator.isEmail(email)) {
               throw new ServerError({
-                  message: "Please provide your password",
+                  message: "Please enter valid email address format.",
                   statusCode: 400,
               });
-              // res.status(400).send("Please provide your password");
+          }
+
+          // Empty password
+          if (!password) {
+              throw new ServerError({
+                  message: "Please provide your password.",
+                  statusCode: 400,
+              });
           }
 
           const user: UserDocument = await User.findOne({email});
 
+          // non-existing user
           if (!user) {
               throw new ServerError({
-                  message: "Unable to login, no user with this email",
+                  message: "Unable to login, no user with this email.",
                   statusCode: 400,
               });
-              // res.status(400).send("no such user");
           }
 
+          // check password encryption and match
           const isMatch = await bcrypt.compare(password, user.password)
 
           if (!isMatch) {
               throw new ServerError({
-                  message: "Wrong Password",
+                  message: "Your provided password does not match with our record.",
                   statusCode: 400,
               });
-              // res.status(400).send({err:"password not match"});
           } else {
               await sendToken({
                   origin: req.get('Origin'),
@@ -56,7 +65,7 @@ export default async (req: Request, res: Response): Promise<void> => {
           if (err instanceof ServerError) {
               res.status(err.statusCode).send(err.message);
           } else {
-              res.status(500).send("Unexpected error");
+              res.status(500).send("Unexpected error.");
           }
       }
 
