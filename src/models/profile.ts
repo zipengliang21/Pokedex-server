@@ -3,6 +3,7 @@ import validator from 'validator';
 import bcrypt from 'bcrypt';
 
 import db from "../mongodb.config";
+import {Pokemon} from"./pokemon";
 
 const instance = db.instance;
 
@@ -13,15 +14,12 @@ export interface IProfile {
     avatar?: string;
     location?: string;
     password: string;
+    collectionList:Array<string>;
     createdOn?: Date;
     updatedOn?: Date;
 }
 
 export type ProfileDocument = mongoose.Document & IProfile;
-
-const CollectionSchema = new instance.Schema({
-    pokemonId:String,
-})
 
 const profileSchema = new instance.Schema({
     userName: { type: String, required: [true, 'User must have a name. '] },
@@ -31,7 +29,7 @@ const profileSchema = new instance.Schema({
         required: [true, 'User must have an email address.'],
         validate: [validator.isEmail, 'Please provide a valid email'],
     },
-    description: { type: String, default: '' },
+    description: { type: String},
     avatar: {
         type: String,
         default: "http://3.bp.blogspot.com/-fZ-FTGBT_OI/V87me3nL3PI/AAAAAAAAAkQ/" +
@@ -44,7 +42,7 @@ const profileSchema = new instance.Schema({
     },
     createdOn: { type: Date, default: Date.now },
     updatedOn: { type: Date, default: Date.now },
-    collectionList:{type: CollectionSchema},
+    collectionList:[{pId: {type: String}}],
 }, { collection: "profile"})
 
 // Hash the plain text password before saving

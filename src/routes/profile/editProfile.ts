@@ -6,16 +6,12 @@ export default async (req: Request, res: Response): Promise<void> => {
     const email:string = req.body.email;
     const userName: string = req.body.userName;
     const description: string = req.body.description ? req.body.description : 'no description';
-    const avatar:any = req.body.avatar;
-    const password:string = req.body.password;
     const location:string = req.body.location? req.body.location : '';
-    const cPassword:string = req.body.cPassword;
+    const _id  = req.body.userId;
 
-    const id  = req.body.userId;
+    const password = await bcrypt.hash(req.body.password, 8);
 
-    const isMatch = await bcrypt.compare(password, cPassword)
-
-    const condition = {userId:id };
+    const condition = {_id};
 
     const query = {'email':email,
                     'userName': userName,
@@ -23,14 +19,9 @@ export default async (req: Request, res: Response): Promise<void> => {
                     'password':password,
                     'location':location};
 
-    if(isMatch){
-        Profile.findOneAndUpdate(condition, query, {upsert: true}, function(err, doc) {
-            if (err) return res.send(500);
-            return res.send("promise done");
-        });
-    } else{
-        res.status(300).send('pwd mismatched');
-    }
-
+    Profile.findOneAndUpdate(condition, query, {upsert: true}, function(err, doc) {
+        if (err) return res.send(500);
+        return res.send("promise done");
+    });
 
 };
