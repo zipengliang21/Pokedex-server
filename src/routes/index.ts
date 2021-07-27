@@ -25,7 +25,7 @@ const setUpRoutes = (app: Express): void => {
 
     app.get('/profile/:_id',profile.getProfile);
     app.post('/profile/edit',profile.editProfile);
-    app.post('./profile/avatar',profile.editAvatar);
+    app.post('/profile/avatar',profile.editAvatar);
     app.post('/collection/add/',profile.addCollection);
     app.post('/collection/del/',profile.deleteCollection);
 
