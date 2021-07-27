@@ -1,30 +1,27 @@
 import { Request, Response } from 'express';
+import bcrypt from "bcrypt";
 import {Profile, ProfileDocument} from "../../models/profile";
 
 export default async (req: Request, res: Response): Promise<void> => {
+    const email:string = req.body.email;
     const userName: string = req.body.userName;
-    const userDescription: string = req.body.description ? req.body.description : 'no description';
-    const avatar:any = req.body.avatar;
-    const password:string = req.body.password;
+    const description: string = req.body.description ? req.body.description : 'no description';
     const location:string = req.body.location? req.body.location : '';
+    const _id  = req.body.userId;
 
-    const id  = req.body.userId;
-    // console.log(profile[0])
+    const password = await bcrypt.hash(req.body.password, 8);
 
-    // profile[0].userName = userName;
-    // profile[0].userDescription = userDescription;
-    // profile[0].password = password;
-    // profile[0].location = location;
+    const condition = {_id};
 
-    const condition = {userId:id };
-
-    const query = {'userName': userName,
-                   'userDescription':userDescription,
-                    'password':password,
-                    'location':location};
+    const query = {'email':email,
+        'userName': userName,
+        'description':description,
+        'password':password,
+        'location':location};
 
     Profile.findOneAndUpdate(condition, query, {upsert: true}, function(err, doc) {
         if (err) return res.send(500);
         return res.send("promise done");
     });
+
 };
