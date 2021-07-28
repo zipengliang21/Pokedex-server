@@ -11,12 +11,14 @@ export default async (req: Request, res: Response): Promise<void> => {
         postID,
         commentID,
         content,
+        avatar,
         date
     }: {userId: string;
         userName: string;
         postID: string;
         commentID: string;
         content: string;
+        avatar: string;
     date:Date} = req.body;
 
     if (content === null || content === undefined || typeof content !== 'string') {
@@ -45,6 +47,7 @@ export default async (req: Request, res: Response): Promise<void> => {
         postID,
         commentID,
         content,
+        avatar,
         date,
     };
     const newComment: CommentDocument = await new Comments(commentInfo).save();

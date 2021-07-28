@@ -4,26 +4,20 @@ import { ServerError } from '../../util/util';
 export default async (req: Request, res: Response): Promise<void> => {
     const id = req.body.id;
     const name = req.body.name;
-
-    if (id ===''|| id === undefined || name ===''|| name === undefined) {
-        throw new ServerError({
-            message: "no id or name ",
-            statusCode: 400,
-        });
-    }
+    try {
+        if (id ===''|| id === undefined || name ===''|| name === undefined) {
+            throw new ServerError({
+                message: "no id or name ",
+                statusCode: 400,
+            });
+        }
 
     let pokemonExists: boolean;
-    try {
-        pokemonExists = await Pokemon.exists({
+    pokemonExists = await Pokemon.exists({
             id: id,
             name: name,
         });
-    } catch (err) {
-        throw new ServerError({
-            statusCode: 400,
-            message: "find pokemon id error",
-        });
-    }
+
     if (!pokemonExists) {
         throw new ServerError({
             statusCode: 400,
@@ -33,4 +27,12 @@ export default async (req: Request, res: Response): Promise<void> => {
 
     await Pokemon.deleteOne({id: id, name: name});
     res.sendStatus(204);
+
+    }catch (err) {
+        if (err instanceof ServerError) {
+            res.status(err.statusCode).send(err.message);
+        } else {
+            res.status(500).send("Unexpected error.");
+        }
+}
 };

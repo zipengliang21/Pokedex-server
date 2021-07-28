@@ -10,6 +10,7 @@ export interface IComment {
     postID: string;
     commentID: string;
     content: string;
+    avatar?: string;
     date: Date;
 }
 
@@ -21,6 +22,8 @@ const commentSchema = new instance.Schema({
     postID: {type: String, required: true},
     commentID: {type: String, required: true},
     content: {type: String, required: true},
+    avatar: {type:String, default: "http://3.bp.blogspot.com/-fZ-FTGBT_OI/V87me3nL3PI/AAAAAAAAAkQ/" +
+            "ornK37y9NRgbYhQB1sjANbXUX2HxrISbgCK4B/s1600/068_Machamp.png"},
     date: { type: Date, required: true},
 
 }, { collection: "comments"})
