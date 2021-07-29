@@ -28,6 +28,14 @@ export default class App {
             this.app.use(logger('dev'));
         }
 
+        const buildPath = path.join(__dirname, '../build');
+        this.app.use(express.static(buildPath));
+
+        this.app.get('*', (req, res) => {
+            res.sendFile('/index.html',{root:'build'});
+        });
+
+
         /*
         configure cross origin
         */
