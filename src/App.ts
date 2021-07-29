@@ -31,34 +31,6 @@ export default class App {
         const buildPath = path.join(__dirname, '../pokedex-frontend');
         this.app.use(express.static(buildPath));
 
-        this.app.get('/api/*', (req, res) => {
-            res.sendFile('index.html',{root:'build'});
-        });
-        // this.app.get('/', function (req, res) {
-        //     res.sendFile('index.html', { root: 'build' });
-        // });
-        // this.app.get('/posts/*', function (req, res) {
-        //     res.sendFile('index.html', { root: 'build' });
-        // });
-        // this.app.get('/pokemons/*', function (req, res) {
-        //     res.sendFile('index.html', { root: 'build' });
-        // });
-        // this.app.get('/comments/*', function (req, res) {
-        //     res.sendFile('index.html', { root: 'build' });
-        // });
-        // this.app.get('/profile/*', function (req, res) {
-        //     res.sendFile('index.html', { root: 'build' });
-        // });
-        //
-        // this.app.get('/profile/*', function (req, res) {
-        //     res.sendFile('index.html', { root: 'build' });
-        // });
-
-
-
-
-
-
         /*
         configure cross origin
         */
