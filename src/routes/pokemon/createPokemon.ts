@@ -9,7 +9,7 @@ export default async (req: Request, res: Response): Promise<void> => {
     let result = await Pokemon.find({});
     let img = "http://img.pokemondb.net/artwork/" + newPokemon.name.toLowerCase() +".jpg";
     let id = result.length + 1 +'';
-
+try {
     if (newPokemon.name === ''|| newPokemon.name === undefined){
         throw new ServerError({
             message: "no name",
@@ -40,4 +40,12 @@ export default async (req: Request, res: Response): Promise<void> => {
 
     const added = await Pokemon.findOne({id: id});
     res.status(200).json({ added });
+
+}catch (err) {
+    if (err instanceof ServerError) {
+        res.status(err.statusCode).send(err.message);
+    } else {
+        res.status(500).send("Unexpected error.");
+    }
+}
 };
