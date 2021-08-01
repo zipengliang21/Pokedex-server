@@ -28,9 +28,6 @@ export default class App {
             this.app.use(logger('dev'));
         }
 
-        const buildPath = path.join(__dirname, '../pokedex-frontend');
-        this.app.use(express.static(buildPath));
-
         /*
         configure cross origin
         */
