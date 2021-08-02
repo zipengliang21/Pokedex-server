@@ -39,6 +39,7 @@ export default class App {
                     'https://liangzipeng.com',
                     'https://liangzipeng.com/',
                     'https://liangzipeng.com/Pokemon/',
+                    'https://pokedex-website-2021.herokuapp.com',
                     'https://pokedex-website-2021.herokuapp.com/'
                 ],
             })
