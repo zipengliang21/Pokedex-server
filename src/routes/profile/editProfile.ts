@@ -12,7 +12,7 @@ export default async (req: Request, res: Response): Promise<void> => {
 
     const password = await bcrypt.hash(req.body.password, 8);
 
-    const condition = {id_:_id};
+    const condition = {_id:_id};
 
     const query = {
         'email':email,
@@ -21,7 +21,8 @@ export default async (req: Request, res: Response): Promise<void> => {
         'password':password,
         'location':location};
     const user = await Profile.findOne({_id:_id});
-    await Profile.findOneAndUpdate(condition, query, {new: true }, function(err, doc) {
+    console.log(user);
+    await Profile.findOneAndUpdate(condition, query, {new: true}, function(err, doc) {
         if (err) return res.send(500);
         return res.send("promise done");
     });
