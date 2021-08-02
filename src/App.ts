@@ -38,7 +38,8 @@ export default class App {
                     'http://localhost:3000',
                     'https://liangzipeng.com',
                     'https://liangzipeng.com/',
-                    'https://liangzipeng.com/Pokemon/'
+                    'https://liangzipeng.com/Pokemon/',
+                    'https://pokedex-website-2021.herokuapp.com/'
                 ],
             })
         );
