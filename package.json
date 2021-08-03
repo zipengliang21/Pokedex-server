@@ -51,8 +51,7 @@
     "start": "npm run start-prod",
     "start-prod": "nodemon ./src/index.ts",
     "start-dev": "env-cmd -f ./config/dev.env nodemon ./src/index.ts",
-    "build": "tsc",
-    "postinstall": "npm run build"
+    "heroku-postbuild": "cd Pokedex && npm install && npm run build"
   },
   "author": "Zipeng Liang, Jenna Che, You Ding, Hongxi Guo",
   "license": "ISC"
