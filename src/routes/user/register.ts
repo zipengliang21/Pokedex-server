@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import {Request, Response} from "express";
 import {ServerError} from "../../util/util";
 import {IUser, User, UserDocument} from "../../models/user";
 import {sendToken} from "../../middleware/auth";
@@ -12,9 +12,7 @@ export default async (req: Request, res: Response): Promise<void> => {
         confirmPassword
     } = req.body;
     let userExist: IUser;
-
     try {
-        // Empty email address
         if (!email) {
             throw new ServerError({
                 message: "Please provide your email address.",
@@ -22,7 +20,6 @@ export default async (req: Request, res: Response): Promise<void> => {
             });
         }
 
-        // Empty user name
         if (!userName) {
             throw new ServerError({
                 message: "Please provide your user name.",
@@ -30,7 +27,6 @@ export default async (req: Request, res: Response): Promise<void> => {
             });
         }
 
-        // Empty password
         if (!password) {
             throw new ServerError({
                 message: "Please provide your password.",
@@ -38,7 +34,6 @@ export default async (req: Request, res: Response): Promise<void> => {
             });
         }
 
-        // Empty confirm password
         if (!password) {
             throw new ServerError({
                 message: "Please provide your confirmed password.",
@@ -46,7 +41,6 @@ export default async (req: Request, res: Response): Promise<void> => {
             });
         }
 
-        // Invalid email address format
         if (!validator.isEmail(email)) {
             throw new ServerError({
                 message: "Please enter valid email address format.",
@@ -54,8 +48,7 @@ export default async (req: Request, res: Response): Promise<void> => {
             });
         }
 
-        // Existing user email address
-        userExist = await User.findOne({ email: email });
+        userExist = await User.findOne({email: email});
         if (userExist) {
             throw new ServerError({
                 message: "User Already Exist.",
@@ -63,7 +56,6 @@ export default async (req: Request, res: Response): Promise<void> => {
             });
         }
 
-        // Too long user name (i.e length >= 20)
         if (userName.length >= 20) {
             throw new ServerError({
                 message: "Your provided user name is too long.",
@@ -71,7 +63,6 @@ export default async (req: Request, res: Response): Promise<void> => {
             });
         }
 
-        // Too short password (i.e length < 8)
         if (password.length < 8) {
             throw new ServerError({
                 message: "The minimum length of password is 8.",
@@ -79,7 +70,6 @@ export default async (req: Request, res: Response): Promise<void> => {
             });
         }
 
-        // Too long password (i.e length > 16)
         if (password.length > 16) {
             throw new ServerError({
                 message: "The maximum length of password is 16.",
@@ -87,7 +77,6 @@ export default async (req: Request, res: Response): Promise<void> => {
             });
         }
 
-        // password !== confirm password
         if (password !== confirmPassword) {
             throw new ServerError({
                 message: "The two passwords you enter do not match.",
@@ -95,7 +84,6 @@ export default async (req: Request, res: Response): Promise<void> => {
             });
         }
 
-        // Save new user to db
         const userInfo: IUser = {
             email,
             userName,
@@ -103,19 +91,19 @@ export default async (req: Request, res: Response): Promise<void> => {
         };
 
         await new User(userInfo).save();
-        const newUser: UserDocument = await User.findOne({ email: email });
+        const newUser: UserDocument = await User.findOne({email: email});
         sendToken({
-            origin: req.get('Origin'),
+            origin: req.get("Origin"),
             user: newUser,
             statusCode: 201,
             res: res,
         });
-    }catch (err) {
+    } catch (err) {
         if (err instanceof ServerError) {
             res.status(err.statusCode).send(err.message);
         } else {
             res.status(500).send("Unexpected error.");
         }
-}
+    }
 
 }

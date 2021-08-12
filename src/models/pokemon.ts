@@ -24,7 +24,7 @@ const StatsSchema = new instance.Schema({
     spattack: String,
     spdefense: String,
     speed: String,
-})
+});
 
 const defaultStats = {
     hp: "50",
@@ -33,34 +33,34 @@ const defaultStats = {
     spattack: "50",
     spdefense: "50",
     speed: "50",
-}
+};
 
 const LevelSchema = new instance.Schema({
     learnedat: String,
     name: String,
     gen: String,
-})
+});
 
 const TmhmSchema = new instance.Schema({
     learnedat: String,
     name: String,
     gen: String,
-})
+});
 
 const EggSchema = new instance.Schema({
     name: String,
     gen: String,
-})
+});
 
 const TutorSchema = new instance.Schema({
     name: String,
     gen: String,
-})
+});
 
 const Gen34Schema = new instance.Schema({
     name: String,
     method: String,
-})
+});
 
 const MovesSchema = new instance.Schema({
     level: [LevelSchema],
@@ -68,7 +68,7 @@ const MovesSchema = new instance.Schema({
     egg: [EggSchema],
     tutor: [TutorSchema],
     gen34: [Gen34Schema],
-})
+});
 
 const DamagesSchema = new instance.Schema({
     bug: String,
@@ -88,17 +88,17 @@ const DamagesSchema = new instance.Schema({
     rock: String,
     steel: String,
     water: String,
-})
+});
 
 const SexSchema = new instance.Schema({
     male: Number,
     female: String,
-})
+});
 
 const AbilitiesSchema = new instance.Schema({
     normal: [String],
     hidden: [String],
-})
+});
 
 const MiscSchema = new instance.Schema({
     sex: SexSchema,
@@ -113,7 +113,7 @@ const MiscSchema = new instance.Schema({
     evpoints: [String],
     fleeflag: String,
     entreeforestlevel: String,
-})
+});
 
 const pokemonSchema = new instance.Schema({
     name: {type: String, required: true},
@@ -124,28 +124,6 @@ const pokemonSchema = new instance.Schema({
     moves: {type: [MovesSchema], default: undefined},
     damages: {type: DamagesSchema, default: undefined},
     misc: {type: MiscSchema},
-}, { collection: "pokemons"})
+}, {collection: "pokemons"});
 
-export const Pokemon = instance.model<any>('Pokemon', pokemonSchema);
-
-// export interface IPost {
-//     userId: string;
-//     userName: string;
-//     postID: string;
-//     title: string;
-//     description: string;
-//     content: string;
-// }
-//
-// export type PostDocument = mongoose.Document & IPost;
-//
-// const postSchema = new instance.Schema({
-//     userId: {type: String, required: true},
-//     userName: {type: String, required: true},
-//     postID: {type: String, required: true},
-//     title: {type: String, required: true},
-//     description: {type: String, required: true},
-//     content: {type: String, required: true},
-// }, { collection: "posts"})
-//
-// export const Posts = instance.model<any>('Posts', postSchema);
+export const Pokemon = instance.model<any>("Pokemon", pokemonSchema);

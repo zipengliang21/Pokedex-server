@@ -1,15 +1,15 @@
-import cookieParser from 'cookie-parser';
-import cors from 'cors';
-import { Express, NextFunction, Request, Response } from 'express';
-import express from 'express';
-import http from 'http';
-import createError from 'http-errors';
-import logger from 'morgan';
-import path from 'path';
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import {Express, NextFunction, Request, Response} from "express";
+import express from "express";
+import http from "http";
+import createError from "http-errors";
+import logger from "morgan";
+import path from "path";
 
-import db from './mongodb.config';
-import setUpRoutes from './routes/index';
-import { normalizePort, stdout } from './util/util';
+import db from "./mongodb.config";
+import setUpRoutes from "./routes/index";
+import {normalizePort, stdout} from "./util/util";
 
 export default class App {
     private readonly port: number;
@@ -24,9 +24,12 @@ export default class App {
         /*
         use logger
         */
-        if (process.env.NODE_ENV !== 'test') {
-            this.app.use(logger('dev'));
+        if (process.env.NODE_ENV !== "test") {
+            this.app.use(logger("dev"));
         }
+
+        const buildPath = path.join(__dirname, "../Pokedex-Frontend/build");
+        this.app.use(express.static(buildPath));
 
         /*
         configure cross origin
@@ -35,12 +38,12 @@ export default class App {
             cors({
                 credentials: true,
                 origin: [
-                    'http://localhost:3000',
-                    'https://liangzipeng.com',
-                    'https://liangzipeng.com/',
-                    'https://liangzipeng.com/Pokemon/',
-                    'https://pokedex-website-2021.herokuapp.com',
-                    'https://pokedex-website-2021.herokuapp.com/'
+                    "http://localhost:3000",
+                    "https://liangzipeng.com",
+                    "https://liangzipeng.com/",
+                    "https://liangzipeng.com/Pokemon/",
+                    "https://pokedex-website-2021.herokuapp.com",
+                    "https://pokedex-website-2021.herokuapp.com/"
                 ],
             })
         );
@@ -49,8 +52,8 @@ export default class App {
         configure express
         */
         this.app.use(express.json());
-        this.app.use(express.urlencoded({ extended: false }));
-        this.app.use(express.static(path.join(__dirname, 'public')));
+        this.app.use(express.urlencoded({extended: false}));
+        this.app.use(express.static(path.join(__dirname, "public")));
 
         /*
         configure cookie
@@ -71,7 +74,6 @@ export default class App {
         require("./models/comment");
         require("./models/profile");
         require("./models/user");
-        require("./models/admin");
 
         /*
         configure routes
@@ -93,7 +95,7 @@ export default class App {
 
     stop(): void {
         this.server.close(() => {
-            stdout.info('Server will stop.');
+            stdout.info("Server will stop.");
         });
     }
 }

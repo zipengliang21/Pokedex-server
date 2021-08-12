@@ -1,32 +1,28 @@
 import {Request, Response} from "express";
-import {Pokemon} from "../../models/pokemon";
+import {Posts} from "../../models/post";
 import {ServerError} from "../../util/util";
 
 export default async (req: Request, res: Response): Promise<void> => {
-    const id = req.body.id;
-    const name = req.body.name;
+    const _id = req.body._id;
     try {
-        if (id === "" || id === undefined || name === "" || name === undefined) {
+        if (_id === "" || _id === undefined) {
             throw new ServerError({
-                message: "no id or name ",
+                message: "not get such post id",
                 statusCode: 400,
             });
         }
 
-        let pokemonExists: boolean;
-        pokemonExists = await Pokemon.exists({
-            id: id,
-            name: name,
-        });
+        let postExists: boolean;
+        postExists = await Posts.exists({_id: _id});
 
-        if (!pokemonExists) {
+        if (!postExists) {
             throw new ServerError({
                 statusCode: 400,
-                message: "no such pokemon",
+                message: "no such post",
             });
         }
 
-        await Pokemon.deleteOne({id: id, name: name});
+        await Posts.deleteOne({_id: _id});
         res.sendStatus(204);
 
     } catch (err) {
